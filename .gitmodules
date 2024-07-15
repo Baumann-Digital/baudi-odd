@@ -1,0 +1,3 @@
+[submodule "submodules/music-encoding"]
+	path = submodules/music-encoding
+	url = git@github.com:music-encoding/music-encoding.git
