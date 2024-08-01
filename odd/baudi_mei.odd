@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  © 2018 by the Music Encoding Initiative (MEI).
+  Licensed under the Educational Community License, Version 2.0 (the "License"); you may
+  not use this file except in compliance with the License. You may obtain a copy of the License
+  at http://opensource.org/licenses/ECL-2.0.
+  
+  Unless required by applicable law or agreed to in writing, software distributed under the
+  License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+  OF ANY KIND, either express or implied. See the License for the specific language
+  governing permissions and limitations under the License.
+  
+  This is a derivative work based on earlier versions of the schema © 2001-2006 Perry Roland
+  and the Rector and Visitors of the University of Virginia; licensed under the Educational
+  Community License version 1.0.
+  
+  CONTACT: info@music-encoding.org
+--><?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_odds.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?><?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_odds.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Schema for Baumann-Digital</title>
+        <respStmt>
+          <resp>Authored by</resp>
+          <name xml:id="dried">Dennis Ried</name>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <p/>
+      </publicationStmt>
+      <sourceDesc>
+        <p/>
+      </sourceDesc>
+    </fileDesc>
+    <revisionDesc>
+      <change when="2024-07-15" type="meigarage">
+        <desc>Create basic ODD online with https://meigarage.edirom.de</desc>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <front>
+      <divGen type="toc"/>
+    </front>
+    <body>
+      <!-- Limit the set of possible start elements -->
+      <schemaSpec ident="mei" ns="http://www.music-encoding.org/ns/mei" prefix="mei_" start="mei meiHead work" source="../sources/mei-all_compiled.odd">
+        <!-- Declare MEI and XLink namespaces for use in Schematron -->
+        <constraintSpec ident="set_ns" scheme="isoschematron" mode="add">
+          <constraint>
+            <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron" prefix="mei" uri="http://www.music-encoding.org/ns/mei"/>
+            <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron" prefix="xlink" uri="http://www.w3.org/1999/xlink"/>
+          </constraint>
+        </constraintSpec>
+        <!-- Include all modules -->
+        <moduleRef key="MEI"/>
+        <moduleRef key="MEI.cmn"/>
+        <moduleRef key="MEI.cmnOrnaments"/>
+        <moduleRef key="MEI.critapp"/>
+        <moduleRef key="MEI.drama"/>
+        <moduleRef key="MEI.edittrans"/>
+        <moduleRef key="MEI.facsimile"/>
+        <moduleRef key="MEI.figtable"/>
+        <moduleRef key="MEI.frbr"/>
+        <moduleRef key="MEI.gestural"/>
+        <moduleRef key="MEI.harmony"/>
+        <moduleRef key="MEI.header"/>
+        <moduleRef key="MEI.lyrics"/>
+        <moduleRef key="MEI.msDesc"/>
+        <moduleRef key="MEI.namesdates"/>
+        <moduleRef key="MEI.performance"/>
+        <moduleRef key="MEI.ptrref"/>
+        <moduleRef key="MEI.shared"/>
+        <moduleRef key="MEI.text"/>
+        <moduleRef key="MEI.visual"/>
+        <!--<!-\- Include SVG -\->
+        <moduleRef url="https://www.tei-c.org/release/xml/tei/custom/schema/relaxng/svg11.rng" prefix="svg_">
+          <content>
+            <rng:define name="mei_model.graphicLike" combine="choice">
+              <rng:ref name="svg_svg"/>
+            </rng:define>
+          </content>
+        </moduleRef>-->
+        
+        <moduleSpec ident="baudi.core.module">
+          <desc xml:lang="de" versionDate="2022-11-08">Modul für HenDi-spezifische Ergänzungen</desc>
+          <desc xml:lang="en" versionDate="2017-11-08">Module for HenDi specific additions</desc>
+        </moduleSpec>
+        
+        <macroSpec ident="baudi_docStatus.list" mode="add" module="baudi.core.module">
+          <content>
+            <rng:choice>
+              <rng:value>proposed</rng:value>
+              <rng:value>candidate</rng:value>
+              <rng:value>approved</rng:value>
+            </rng:choice>
+          </content>
+        </macroSpec>
+        
+        <macroSpec ident="baudi_instrument.list" mode="add" module="baudi.core.module">
+          <content>
+            <rng:choice>
+              <rng:value></rng:value>
+              <rng:value></rng:value>
+              <rng:value></rng:value>
+            </rng:choice>
+          </content>
+        </macroSpec>
+        
+        <classSpec ident="att.classed" module="MEI.shared" type="atts" mode="change">
+          <desc xml:lang="en">Attributes which can be used to classify features.</desc>
+          <attList>
+            <attDef ident="class" usage="opt" mode="change">
+              <desc xml:lang="en">Contains one or more URIs which denote classification terms that apply to the entity bearing this attribute.</desc>
+              <datatype>
+                <rng:data type="anyURI"/>
+              </datatype>
+              <constraintSpec ident="check_classURI" scheme="schematron" mode="delete"/>
+            </attDef>
+          </attList>
+        </classSpec>
+        
+        <elementSpec ident="mei" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+          <!--<desc versionDate="2013-11-11" xml:lang="en">contains a single MEI-conformant document, consisting of an MEI header and a musical text, either in isolation or as part of an meiCorpus element.</desc>
+          <desc versionDate="2013-11-11" xml:lang="de">enthält ein einzelenes MEI-konformes Dokument, dass aus einem MEI header und muskialischem Text, entweder alleinstehend oder als Teil eines meiCorpus Elements, besteht.</desc>-->
+          <attList>
+            <attDef ident="status" usage="req" mode="add">
+              <desc xml:lang="en" versionDate="2024-07-29">defines the status of a document.</desc>
+              <datatype>
+                <dataRef key="baudi_docStatus.list"/>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+        
+        
+        <elementSpec ident="zone" module="MEI.facsimile" mode="change">
+          <content>
+            <rng:zeroOrMore>
+              <rng:ref name="model.figDescLike"/>
+            </rng:zeroOrMore>
+            <rng:zeroOrMore>
+              <rng:ref name="model.graphicLike"/>
+            </rng:zeroOrMore>
+            <rng:zeroOrMore>
+              <rng:ref name="point"/>
+            </rng:zeroOrMore>
+          </content>
+        </elementSpec>
+        
+        <elementSpec ident="point" module="MEI.facsimile" mode="add">
+          <attList>
+            <attDef ident="x">
+              <desc>x-cooridnate</desc>
+              <datatype>
+                <rng:data type="positiveInteger"/>
+              </datatype>
+            </attDef>
+            <attDef ident="y">
+              <desc>y-cooridnate</desc>
+              <datatype>
+                <rng:data type="positiveInteger"/>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+        
+        
+        
+        
+        
+        <elementSpec ident="perfRes" module="MEI.header" mode="change">
+          <gloss versionDate="2024-07-29" xml:lang="en">performance resource</gloss>
+          <desc versionDate="2024-07-29" xml:lang="en">Name of an instrument on which a performer plays, a performer's voice range, or a standard performing ensemble designation.</desc>
+          <content>
+            <rng:zeroOrMore>
+              <rng:choice>
+                <rng:text/>
+                <rng:ref name="model.textPhraseLike.limited"/>
+                <rng:ref name="perfRes"/>
+                <rng:ref name="range"/>
+              </rng:choice>
+            </rng:zeroOrMore>
+          </content>
+        </elementSpec>
+        
+        <elementSpec ident="range" module="baudi.core.module" mode="add">
+          <gloss versionDate="2024-07-29" xml:lang="en">range</gloss>
+          <desc versionDate="2024-07-29" xml:lang="en">Range of an instrument or a performer's voice range.</desc>
+          <content>
+            <rng:zeroOrMore>
+              <rng:choice>
+                <rng:text/>
+                <rng:ref name="model.textPhraseLike.limited"/>
+                <rng:ref name="perfRes"/>
+                <rng:ref name="rangeNote"/>
+              </rng:choice>
+            </rng:zeroOrMore>
+          </content>
+        </elementSpec>
+        
+        <elementSpec ident="rangeNote" module="baudi.core.module" mode="add">
+          <desc xml:lang="en">Highest or lowest pitch in a score, staff, or layer.</desc>
+          <classes>
+            <memberOf key="att.common"/>
+            <memberOf key="att.ambNote.log"/>
+          </classes>
+          <attList>
+            <attDef ident="type" mode="change" usage="req">
+              <valList mode="add" type="closed">
+                <valItem ident="highest">
+                  <desc xml:lang="en" versionDate="2024-07-29">highest pitch in a range</desc>
+                </valItem>
+                <valItem ident="highestAlt">
+                  <gloss xml:lang="en">highest alternative</gloss>
+                  <desc xml:lang="en" versionDate="2024-07-29">highest alternative pitch in a range</desc>
+                </valItem>
+                <valItem ident="lowest">
+                  <desc xml:lang="en" versionDate="2024-07-29">lowest pitch in a range</desc>
+                </valItem>
+                <valItem ident="lowestAlt">
+                  <gloss xml:lang="en">lowest alternative</gloss>
+                  <desc xml:lang="en" versionDate="2024-07-29">lowest alternative pitch in a range</desc>
+                </valItem>
+              </valList>
+            </attDef>
+          </attList>
+        </elementSpec>
+        
+      </schemaSpec>
+    </body>
+  </text>
+</TEI>
