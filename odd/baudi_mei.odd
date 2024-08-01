@@ -45,7 +45,7 @@
     </front>
     <body>
       <!-- Limit the set of possible start elements -->
-      <schemaSpec ident="mei" ns="http://www.music-encoding.org/ns/mei" prefix="mei_" start="mei meiHead work" source="../sources/mei-all_compiled.odd">
+      <schemaSpec ident="mei" ns="http://www.music-encoding.org/ns/mei" prefix="mei_" start="mei meiHead work expression" source="../sources/mei-all_compiled.odd">
         <!-- Declare MEI and XLink namespaces for use in Schematron -->
         <constraintSpec ident="set_ns" scheme="isoschematron" mode="add">
           <constraint>
@@ -55,6 +55,7 @@
         </constraintSpec>
         <!-- Include all modules -->
         <moduleRef key="MEI"/>
+        <moduleRef key="MEI.analytical"/>
         <moduleRef key="MEI.cmn"/>
         <moduleRef key="MEI.cmnOrnaments"/>
         <moduleRef key="MEI.critapp"/>
@@ -89,22 +90,255 @@
         </moduleSpec>
         
         <macroSpec ident="baudi_docStatus.list" mode="add" module="baudi.core.module">
+          <desc xml:lang="en" versionDate="2024-08-01">Definition of state of a document</desc>
           <content>
-            <rng:choice>
-              <rng:value>proposed</rng:value>
-              <rng:value>candidate</rng:value>
-              <rng:value>approved</rng:value>
-            </rng:choice>
+            <valList mode="add" type="closed">
+              <valItem ident="proposed">
+                <desc versionDate="2024-08-01" xml:lang="en">Data is just recorded</desc>
+              </valItem>
+              <valItem ident="candidate">
+                <desc versionDate="2024-08-01" xml:lang="en">Data is in revision</desc>
+              </valItem>
+              <valItem ident="approved">
+                <desc versionDate="2024-08-01" xml:lang="en">Data is approved</desc>
+              </valItem>
+            </valList>
           </content>
         </macroSpec>
         
         <macroSpec ident="baudi_instrument.list" mode="add" module="baudi.core.module">
+          <desc xml:lang="en" versionDate="2024-08-01">A list of instruments</desc>
           <content>
-            <rng:choice>
-              <rng:value></rng:value>
-              <rng:value></rng:value>
-              <rng:value></rng:value>
-            </rng:choice>
+            <valList mode="add" type="closed">
+              <valItem ident="orchestra">
+                <gloss versionDate="2024-08-01" xml:lang="de">Orchester</gloss>
+              </valItem>
+              <valItem ident="ensemble">
+                <gloss versionDate="2024-08-01" xml:lang="de">Ensemble</gloss>
+              </valItem>
+              <valItem ident="quartett.string">
+                <gloss versionDate="2024-08-01" xml:lang="de">Streichquartett</gloss>
+              </valItem>
+              <valItem ident="voice">
+                <gloss versionDate="2024-08-01" xml:lang="de">Singstimme</gloss>
+              </valItem>
+              <valItem ident="speaker">
+                <gloss versionDate="2024-08-01" xml:lang="de">Sprecher</gloss>
+              </valItem>
+              <valItem ident="voice.high">
+                <gloss versionDate="2024-08-01" xml:lang="de">Hohe Stimme</gloss>
+              </valItem>
+              <valItem ident="voice.middle">
+                <gloss versionDate="2024-08-01" xml:lang="de">Mittlere Stimme</gloss>
+              </valItem>
+              <valItem ident="voice.low">
+                <gloss versionDate="2024-08-01" xml:lang="de">Tiefe Stimme</gloss>
+              </valItem>
+              <valItem ident="soprano">
+                <gloss versionDate="2024-08-01" xml:lang="de">Sopran</gloss>
+              </valItem>
+              <valItem ident="soprano.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Sopran I</gloss>
+              </valItem>
+              <valItem ident="soprano.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Sopran II</gloss>
+              </valItem>
+              <valItem ident="mezzosoprano">
+                <gloss versionDate="2024-08-01" xml:lang="de">Mezzosopran</gloss>
+              </valItem>
+              <valItem ident="alto">
+                <gloss versionDate="2024-08-01" xml:lang="de">Alt</gloss>
+              </valItem>
+              <valItem ident="alto.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Alt I</gloss>
+              </valItem>
+              <valItem ident="alto.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Alt II</gloss>
+              </valItem>
+              <valItem ident="tenor">
+                <gloss versionDate="2024-08-01" xml:lang="de">Tenor</gloss>
+              </valItem>
+              <valItem ident="tenor.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Tenor I</gloss>
+              </valItem>
+              <valItem ident="tenor.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Tenor II</gloss>
+              </valItem>
+              <valItem ident="baritone">
+                <gloss versionDate="2024-08-01" xml:lang="de">Bariton</gloss>
+              </valItem>
+              <valItem ident="bassBaritone">
+                <gloss versionDate="2024-08-01" xml:lang="de">Bassbariton</gloss>
+              </valItem>
+              <valItem ident="bass">
+                <gloss versionDate="2024-08-01" xml:lang="de">Bass</gloss>
+              </valItem>
+              <valItem ident="bass.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Bass I</gloss>
+              </valItem>
+              <valItem ident="bass.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Bass II</gloss>
+              </valItem>
+              <valItem ident="choir">
+                <gloss versionDate="2024-08-01" xml:lang="de">Chor</gloss>
+              </valItem>
+              <valItem ident="choir4voices">
+                <gloss versionDate="2024-08-01" xml:lang="de">Chor (4-stimmig)</gloss>
+              </valItem>
+              <valItem ident="choirMale">
+                <gloss versionDate="2024-08-01" xml:lang="de">Männerchor</gloss>
+              </valItem>
+              <valItem ident="choirFemale">
+                <gloss versionDate="2024-08-01" xml:lang="de">Frauenchor</gloss>
+              </valItem>
+              <valItem ident="choirChildren">
+                <gloss versionDate="2024-08-01" xml:lang="de">Knabenchor</gloss>
+              </valItem>
+              <valItem ident="choirMixed">
+                <gloss versionDate="2024-08-01" xml:lang="de">Gemischter Chor</gloss>
+              </valItem>
+              <valItem ident="wood">
+                <gloss versionDate="2024-08-01" xml:lang="de">Holzbläser</gloss>
+              </valItem>
+              <valItem ident="piccolo">
+                <gloss versionDate="2024-08-01" xml:lang="de">Piccolo</gloss>
+              </valItem>
+              <valItem ident="flute">
+                <gloss versionDate="2024-08-01" xml:lang="de">Flöte</gloss>
+              </valItem>
+              <valItem ident="flute.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Flöte I</gloss>
+              </valItem>
+              <valItem ident="flute.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Flöte II</gloss>
+              </valItem>
+              <valItem ident="oboe">
+                <gloss versionDate="2024-08-01" xml:lang="de">Oboe</gloss>
+              </valItem>
+              <valItem ident="oboe.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Oboe I</gloss>
+              </valItem>
+              <valItem ident="oboe.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Oboe II</gloss>
+              </valItem>
+              <valItem ident="clarinet">
+                <gloss versionDate="2024-08-01" xml:lang="de">Klarinette</gloss>
+              </valItem>
+              <valItem ident="clarinet.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Klarinette I</gloss>
+              </valItem>
+              <valItem ident="clarinet.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Klarinette II</gloss>
+              </valItem>
+              <valItem ident="bassoon">
+                <gloss versionDate="2024-08-01" xml:lang="de">Fagott</gloss>
+              </valItem>
+              <valItem ident="bassoon.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Fagott I</gloss>
+              </valItem>
+              <valItem ident="bassoon.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Fagott II</gloss>
+              </valItem>
+              <valItem ident="brass">
+                <gloss versionDate="2024-08-01" xml:lang="de">Blechbläser</gloss>
+              </valItem>
+              <valItem ident="hornFrench">
+                <gloss versionDate="2024-08-01" xml:lang="de">Horn</gloss>
+              </valItem>
+              <valItem ident="hornFrench.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Horn I</gloss>
+              </valItem>
+              <valItem ident="hornFrench.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Horn II</gloss>
+              </valItem>
+              <valItem ident="hornFrench.iii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Horn III</gloss>
+              </valItem>
+              <valItem ident="hornFrench.iv">
+                <gloss versionDate="2024-08-01" xml:lang="de">Horn IV</gloss>
+              </valItem>
+              <valItem ident="trumpet">
+                <gloss versionDate="2024-08-01" xml:lang="de">Trompete</gloss>
+              </valItem>
+              <valItem ident="trumpet.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Trompete I</gloss>
+              </valItem>
+              <valItem ident="trumpet.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Trompete II</gloss>
+              </valItem>
+              <valItem ident="trombone">
+                <gloss versionDate="2024-08-01" xml:lang="de">Posaune</gloss>
+              </valItem>
+              <valItem ident="trombone.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Posaune I</gloss>
+              </valItem>
+              <valItem ident="trombone.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Posaune II</gloss>
+              </valItem>
+              <valItem ident="trombone.iii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Posaune III</gloss>
+              </valItem>
+              <valItem ident="tuba">
+                <gloss versionDate="2024-08-01" xml:lang="de">Tuba</gloss>
+              </valItem>
+              <valItem ident="strings">
+                <gloss versionDate="2024-08-01" xml:lang="de">Streicher</gloss>
+              </valItem>
+              <valItem ident="violin">
+                <gloss versionDate="2024-08-01" xml:lang="de">Violine</gloss>
+              </valItem>
+              <valItem ident="violinChoir">
+                <gloss versionDate="2024-08-01" xml:lang="de">Violin-Chor</gloss>
+              </valItem>
+              <valItem ident="violin.i">
+                <gloss versionDate="2024-08-01" xml:lang="de">Violine I</gloss>
+              </valItem>
+              <valItem ident="violin.i.1">
+                <gloss versionDate="2024-08-01" xml:lang="de">Violine I (Ex. 1)</gloss>
+              </valItem>
+              <valItem ident="violin.i.2">
+                <gloss versionDate="2024-08-01" xml:lang="de">Violine I (Ex. 2)</gloss>
+              </valItem>
+              <valItem ident="violin.ii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Violine II</gloss>
+              </valItem>
+              <valItem ident="violin.iii">
+                <gloss versionDate="2024-08-01" xml:lang="de">Violine III</gloss>
+              </valItem>
+              <valItem ident="viola">
+                <gloss versionDate="2024-08-01" xml:lang="de">Viola</gloss>
+              </valItem>
+              <valItem ident="violoncello">
+                <gloss versionDate="2024-08-01" xml:lang="de">Violoncello</gloss>
+              </valItem>
+              <valItem ident="doubleBass">
+                <gloss versionDate="2024-08-01" xml:lang="de">Kontrabass</gloss>
+              </valItem>
+              <valItem ident="piano">
+                <gloss versionDate="2024-08-01" xml:lang="de">Klavier</gloss>
+              </valItem>
+              <valItem ident="organ">
+                <gloss versionDate="2024-08-01" xml:lang="de">Orgel</gloss>
+              </valItem>
+              <valItem ident="harmonium">
+                <gloss versionDate="2024-08-01" xml:lang="de">Harmonium</gloss>
+              </valItem>
+              <valItem ident="harp">
+                <gloss versionDate="2024-08-01" xml:lang="de">Harfe</gloss>
+              </valItem>
+              <valItem ident="percussion">
+                <gloss versionDate="2024-08-01" xml:lang="de">Schlagwerk</gloss>
+              </valItem>
+              <valItem ident="timpani">
+                <gloss versionDate="2024-08-01" xml:lang="de">Pauke</gloss>
+              </valItem>
+              <valItem ident="bells">
+                <gloss versionDate="2024-08-01" xml:lang="de">(Kleine) Glocken</gloss>
+              </valItem>
+              <valItem ident="turbularBells">
+                <gloss versionDate="2024-08-01" xml:lang="de">Röhrenglocken</gloss>
+              </valItem>
+            </valList>
           </content>
         </macroSpec>
         
@@ -122,8 +356,6 @@
         </classSpec>
         
         <elementSpec ident="mei" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
-          <!--<desc versionDate="2013-11-11" xml:lang="en">contains a single MEI-conformant document, consisting of an MEI header and a musical text, either in isolation or as part of an meiCorpus element.</desc>
-          <desc versionDate="2013-11-11" xml:lang="de">enthält ein einzelenes MEI-konformes Dokument, dass aus einem MEI header und muskialischem Text, entweder alleinstehend oder als Teil eines meiCorpus Elements, besteht.</desc>-->
           <attList>
             <attDef ident="status" usage="req" mode="add">
               <desc xml:lang="en" versionDate="2024-07-29">defines the status of a document.</desc>
@@ -134,6 +366,41 @@
           </attList>
         </elementSpec>
         
+        <elementSpec ident="work" module="MEI.shared" mode="change">
+          <constraintSpec ident="work-status" scheme="schematron">
+            <constraint>
+              <sch:rule context="mei:work[not(parent::mei:componentList) and not(parent::mei:workList)]">
+                <sch:assert test="@status">The attribute @status is required on root level.</sch:assert>
+              </sch:rule>
+            </constraint>
+          </constraintSpec>
+          <attList>
+            <attDef ident="status" usage="rec" mode="add">
+              <desc xml:lang="en" versionDate="2024-07-29">defines the status of a document.</desc>
+              <datatype>
+                <dataRef key="baudi_docStatus.list"/>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+        
+        <elementSpec ident="expression" module="MEI.frbr" mode="change">
+          <constraintSpec ident="expression-status" scheme="schematron">
+            <constraint>
+              <sch:rule context="mei:expression[not(parent::mei:componentList) and not(parent::mei:expressionList)]">
+                <sch:assert test="@status">The attribute @status is required on root level.</sch:assert>
+              </sch:rule>
+            </constraint>
+          </constraintSpec>
+          <attList>
+            <attDef ident="status" usage="rec" mode="add">
+              <desc xml:lang="en" versionDate="2024-07-29">defines the status of a document.</desc>
+              <datatype>
+                <dataRef key="baudi_docStatus.list"/>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
         
         <elementSpec ident="zone" module="MEI.facsimile" mode="change">
           <content>
@@ -183,6 +450,13 @@
               </rng:choice>
             </rng:zeroOrMore>
           </content>
+          <attList>
+          <attDef ident="codedval" mode="change">
+            <datatype>
+              <dataRef key="baudi_instrument.list"/>
+            </datatype>
+          </attDef>
+          </attList>
         </elementSpec>
         
         <elementSpec ident="range" module="baudi.core.module" mode="add">
@@ -226,6 +500,80 @@
               </valList>
             </attDef>
           </attList>
+        </elementSpec>
+        
+        
+        <elementSpec ident="classification" module="MEI.header" mode="change">
+          <content>
+            <rng:zeroOrMore>
+              <rng:ref name="model.headLike"/>
+            </rng:zeroOrMore>
+            <rng:zeroOrMore>
+                <rng:ref name="classCode"/>
+            </rng:zeroOrMore>
+            <rng:zeroOrMore>
+                <rng:ref name="termList"/>
+            </rng:zeroOrMore>
+          </content>
+          <remarks xml:lang="en">
+            <p>The classCode-Element is needed for the edirom-software</p>
+          </remarks>
+        </elementSpec>
+        
+        <elementSpec ident="classCode" module="baudi.core.module" mode="add">
+          <desc xml:lang="en">Element for defining Edirom category anchor</desc>
+          <classes>
+            <memberOf key="att.basic" exclude="xml:base"/>
+          </classes>
+        </elementSpec>
+        
+        <elementSpec ident="termList" module="MEI.header" mode="change">
+          <attList>
+            <attDef ident="classcode" mode="add" usage="opt">
+              <datatype>
+                <dataRef key="data.URI"/>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+        
+        <elementSpec ident="term" module="MEI.shared" mode="change">
+          <attList>
+            <attDef ident="classcode" mode="add" usage="opt">
+              <datatype>
+                <dataRef key="data.URI"/>
+              </datatype>
+            </attDef>
+          </attList>
+        </elementSpec>
+        
+        
+        <elementSpec ident="annot" module="MEI.shared" mode="change">
+          <content>
+            <rng:choice>
+              <rng:group>
+                <rng:zeroOrMore>
+                  <rng:ref name="model.headLike"/>
+                </rng:zeroOrMore>
+                <rng:interleave>
+                  <rng:zeroOrMore>
+                    <rng:ref name="model.textComponentLike"/>
+                  </rng:zeroOrMore>
+                  <rng:zeroOrMore>
+                    <rng:ref name="model.textPhraseLike"/>
+                  </rng:zeroOrMore>
+                </rng:interleave>
+              </rng:group>
+            </rng:choice>
+              <rng:zeroOrMore>
+                <rng:choice>
+                  <rng:text/>
+                  <rng:ref name="model.editLike"/>
+                  <rng:ref name="model.textPhraseLike"/>
+                  <rng:ref name="model.transcriptionLike"/>
+                </rng:choice>
+              </rng:zeroOrMore>
+          </content>
         </elementSpec>
         
       </schemaSpec>
